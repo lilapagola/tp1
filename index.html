@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Noche del Farol Errante</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="libro">
+  <div class="farol" aria-hidden="true"></div>
+  <p class="cuento-titulo">Un cuento de elige-tu-aventura</p>
+  <div id="escena" class="escena"></div>
+</main>
+
+<script>
+/* =========================================================
+   LA NOCHE DEL FAROL ERRANTE
+   Historia original de ficción interactiva.
+   ========================================================= */
+
+const historia = {
+
+  inicio: {
+    rotulo: "La cabaña, noche de tormenta",
+    texto: [
+      "Es tu cumpleaños y estás sola en la cabaña. La vela del pastel que nadie horneó se apagó hace rato, y la tormenta golpea los postigos como si quisiera entrar de una vez por todas.",
+      "De pronto, algo pesado choca contra la puerta. No es el viento: son pasos. Pasos enormes, que hacen temblar los platos en la alacena."
+    ],
+    opciones: [
+      { texto: "Abrir la puerta", ir: "abrirPuerta" },
+      { texto: "Esconderte bajo la mesa", ir: "esconderte" }
+    ]
+  },
+
+  abrirPuerta: {
+    rotulo: "El umbral",
+    texto: [
+      "Levantas la tranca. El viento arranca la puerta de tus manos y la abre de par en par. En el marco, empapada de lluvia, hay una silueta que casi no cabe: el doble de alta que cualquier persona que hayas visto, envuelta en un abrigo de musgo y cuero, sosteniendo un bulto contra el pecho.",
+      "Sus ojos, pequeños entre tanto rostro curtido, te encuentran y se iluminan como si llevara buscándote toda la vida."
+    ],
+    opciones: [
+      { texto: "Preguntar quién es", ir: "preguntar" },
+      { texto: "Retroceder y tomar el atizador de la chimenea", ir: "atizador" }
+    ]
+  },
+
+  esconderte: {
+    rotulo: "Bajo la mesa",
+    texto: [
+      "Te deslizas bajo la mesa justo cuando la puerta cede. Contienes la respiración. Los pasos cruzan la cabaña — despacio, con un cuidado extraño para alguien tan grande — y se detienen frente a ti.",
+      "Una voz grave, pero amable, dice tu nombre como si lo hubiera practicado. \"Sé que estás ahí. No es una cacería. Es una entrega.\" Algo se posa sobre la mesa, justo encima de tu escondite: un peso dulce y cálido que huele a canela quemada."
+    ],
+    opciones: [
+      { texto: "Salir y mirar de frente a quien te llama", ir: "encontrada" }
+    ]
+  },
+
+  preguntar: {
+    rotulo: "Un nombre en la tormenta",
+    texto: [
+      "\"¿Quién sos?\", logras decir, con la voz más firme de lo que esperabas.",
+      "\"Umbra. Guardiana de la Espesura de Vela\", responde, inclinando la cabeza como quien saluda a una igual. \"Y vos sos la razón por la que crucé tres valles con esto a cuestas sin dejar que se moje.\""
+    ],
+    opciones: [
+      { texto: "Continuar", ir: "elPastel" }
+    ]
+  },
+
+  atizador: {
+    rotulo: "El atizador en alto",
+    texto: [
+      "Retrocedés y aferrás el atizador con las dos manos, apuntando el extremo al pecho de la desconocida. Ella se detiene. No con miedo — con algo parecido a la ternura.",
+      "\"Está bien\", dice, bajando lentamente el bulto que carga hasta apoyarlo sobre la mesa. Es un pastel enorme, torcido, con una vela que arde de un modo que ninguna vela debería arder. \"No vine a hacerte daño. Vine a cantarte cumpleaños, aunque llegue empapada y sin voz para hacerlo bien.\""
+    ],
+    opciones: [
+      { texto: "Bajar el atizador, despacio", ir: "elPastel" }
+    ]
+  },
+
+  encontrada: {
+    rotulo: "Cara a cara",
+    texto: [
+      "Salís de debajo de la mesa. De cerca, sus rasgos son toscos pero no duros: cicatrices viejas, una sonrisa que parece pedir permiso para existir.",
+      "\"Umbra\", se presenta. \"Guardiana de la Espesura de Vela. Perdón por la puerta — el viento la quiso más que yo.\" Señala el bulto que dejó sobre la mesa: un pastel torcido, con una vela que arde de un modo que ninguna vela debería arder."
+    ],
+    opciones: [
+      { texto: "Continuar", ir: "elPastel" }
+    ]
+  },
+
+  elPastel: {
+    rotulo: "Una vela que no es una vela",
+    texto: [
+      "Te acercás. Lo que tomaste por una llama diminuta tiene forma: alas de humo, un cuerpo de brasa que respira. \"Un fuego-polilla\", explica Umbra. \"Solo se posa sobre pasteles hechos para quien está por despertar.\"",
+      "Te cuenta que hoy cumplís la edad exacta en la que la magia latente del bosque —la que corre por tu sangre desde que tus padres eran guardianes, mucho antes de que nacieras— empieza a reclamarte. Esta noche, dice, la puerta de la memoria sigue abierta. Al amanecer, se cierra por otros veinte años.",
+      "\"Puedo llevarte a la Espesura ahora mismo\", ofrece. \"O podés quedarte con tu vida tal como la conocés. La decisión es tuya, no mía.\""
+    ],
+    opciones: [
+      { texto: "Aceptar e ir con ella esta misma noche", ir: "aceptar" },
+      { texto: "Pedir tiempo para pensarlo", ir: "dudar" },
+      { texto: "Rechazar y pedirle que se vaya", ir: "rechazar" }
+    ]
+  },
+
+  aceptar: {
+    rotulo: "El camino a la Espesura",
+    texto: [
+      "\"Vamos\", decís, y algo en tu pecho se afloja, como si llevaras años conteniendo esa palabra.",
+      "Salen a la tormenta, pero la lluvia no te alcanza: Umbra abre un paraguas hecho de hojas que nunca se sueltan del tallo. Caminan horas, o minutos — el tiempo se comporta distinto bajo los árboles que empiezan a aparecer, más y más gruesos, hasta que el bosque se cierra sobre ustedes como una puerta antigua."
+    ],
+    opciones: [
+      { texto: "Ver el final", ir: "finalEspesura" }
+    ]
+  },
+
+  dudar: {
+    rotulo: "Un colgante de brasa",
+    texto: [
+      "\"Necesito pensarlo\", decís. Umbra asiente, sin decepción en el gesto.",
+      "\"Tomate la noche\", dice, y saca de su abrigo un colgante de vidrio con una brasa diminuta latiendo adentro. Lo deja sobre la mesa, junto al pastel. \"Si al amanecer todavía brilla, seguí su luz hasta el borde del bosque. Voy a estar esperando. Si se apaga... también está bien.\" Sale a la tormenta y desaparece entre los árboles.",
+      "Pasás la noche despierta, mirando la brasa parpadear al ritmo de algo que no sabés nombrar todavía. Cuando el cielo empieza a aclarar, el colgante sigue encendido, más fuerte que nunca."
+    ],
+    opciones: [
+      { texto: "Seguir la luz hasta el bosque", ir: "seguirLuz" },
+      { texto: "Guardar el colgante en un cajón y quedarte", ir: "quedarte" }
+    ]
+  },
+
+  rechazar: {
+    rotulo: "La puerta se cierra",
+    texto: [
+      "\"Andate\", decís, y te sorprende lo firme que suena. \"No quiero nada de esto.\"",
+      "Umbra no discute. Inclina la cabeza, como hizo al llegar, y retrocede hacia la tormenta. \"Está bien\", dice antes de irse. \"El pastel es tuyo igual. Nadie debería quedarse sin torta en su cumpleaños, elija lo que elija.\"",
+      "La puerta se cierra sola detrás de ella. El fuego-polilla, sin nadie que lo reclame, se apaga poco a poco, dejando apenas un hilo de humo con forma de alas."
+    ],
+    opciones: [
+      { texto: "Ver el final", ir: "finalOlvido" }
+    ]
+  },
+
+  seguirLuz: {
+    rotulo: "El umbral, de nuevo",
+    texto: [
+      "Salís al amanecer siguiendo la brasa, que tira de vos como una brújula tozuda. En el borde del bosque, entre la niebla baja, está Umbra, apoyada contra un árbol como si no hubiera dudado nunca de que ibas a llegar.",
+      "\"Llegaste justo\", dice, y no hay reproche en su voz — solo alivio. \"La puerta espera a quien la necesita, no a quien llega primero.\""
+    ],
+    opciones: [
+      { texto: "Ver el final", ir: "finalEspesura" }
+    ]
+  },
+
+  quedarte: {
+    rotulo: "Una vida ordinaria",
+    texto: [
+      "Guardás el colgante en el cajón de la cómoda, bajo las medias que nunca usás. La brasa se apaga esa misma tarde, como si entendiera.",
+      "La vida sigue: la escuela, los inviernos, los cumpleaños comunes con pasteles comunes. Pero algunas noches de tormenta, cuando el viento golpea los postigos de cierta manera, jurarías escuchar pasos enormes que dan la vuelta a la casa — y siguen de largo, esperando otra vez."
+    ],
+    opciones: [
+      { texto: "Ver el final", ir: "finalOrdinaria" }
+    ]
+  },
+
+  finalEspesura: {
+    esFinal: true,
+    etiqueta: "Final — La Espesura te reclama",
+    rotulo: "Bajo los árboles antiguos",
+    texto: [
+      "El bosque se abre en un claro donde decenas de faroles cuelgan de las ramas sin cuerda que los sostenga. Otras siluetas —algunas tan grandes como Umbra, otras diminutas como el fuego-polilla— se giran a mirarte con la misma expresión: reconocimiento.",
+      "\"Bienvenida a casa\", dice Umbra, y por primera vez en la noche, el nombre que usa para llamarte no es el que te dieron tus padres humanos, sino uno que sentís que siempre fue tuyo."
+    ]
+  },
+
+  finalOlvido: {
+    esFinal: true,
+    etiqueta: "Final — El bosque olvida",
+    rotulo: "Años después",
+    texto: [
+      "Crecés sin recordar del todo esa noche. Queda como un sueño de infancia, de esos que se cuentan en las fiestas: \"una vez soñé que un gigante me traía una torta\". Todos se ríen y lo dejan pasar.",
+      "Pero cada cierto número de años, en las noches de tormenta más fuertes, tenés el mismo sueño otra vez, un poco más nítido. La Espesura, dicen los guardianes entre ellos, nunca deja de tocar dos veces."
+    ]
+  },
+
+  finalOrdinaria: {
+    esFinal: true,
+    etiqueta: "Final — Una vida propia",
+    rotulo: "Muchos cumpleaños después",
+    texto: [
+      "Elegiste tu propio camino, sin faroles colgando de ramas ni fuego-polillas. No fue el camino de Umbra, pero fue el tuyo, elegido con los ojos abiertos.",
+      "El colgante sigue en el cajón, frío desde aquella tarde. A veces lo sacás, le das vueltas entre los dedos y pensás en la Espesura — no con arrepentimiento, sino con la calma de saber que la puerta existió, y que decidiste vos, no la tormenta."
+    ]
+  }
+};
+
+const contenedor = document.getElementById('escena');
+
+function mostrar(idEscena) {
+  const escena = historia[idEscena];
+  contenedor.classList.remove('escena');
+  void contenedor.offsetWidth; /* reinicia la animación de entrada */
+  contenedor.classList.add('escena');
+
+  const parrafos = escena.texto.map(p => `<p>${p}</p>`).join('');
+
+  let html = `<p class="escena__rotulo">${escena.rotulo}</p>`;
+  html += `<div class="escena__texto">${parrafos}</div>`;
+
+  if (escena.esFinal) {
+    html += `
+      <div class="final">
+        <span class="final__etiqueta">${escena.etiqueta}</span>
+        <button class="reiniciar" id="btnReiniciar">Empezar de nuevo</button>
+      </div>`;
+  } else {
+    html += `<div class="opciones">`;
+    escena.opciones.forEach(op => {
+      html += `<button class="opcion" data-ir="${op.ir}"><span class="opcion__marca">—</span>${op.texto}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  contenedor.innerHTML = html;
+
+  if (escena.esFinal) {
+    document.getElementById('btnReiniciar').addEventListener('click', () => mostrar('inicio'));
+  } else {
+    contenedor.querySelectorAll('.opcion').forEach(boton => {
+      boton.addEventListener('click', () => mostrar(boton.dataset.ir));
+    });
+  }
+}
+
+mostrar('inicio');
+</script>
+
+</body>
+</html>
